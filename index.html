@@ -89,7 +89,7 @@
     function iniciarSonido() {
       const noise = document.getElementById("noise");
       if (noise && noise.paused) {
-        noise.volume = 0.01;
+        noise.volume = 0.001;
         noise.loop = true;
         noise.play().catch(err => console.error("Error al reproducir ruido blanco:", err));
       }
