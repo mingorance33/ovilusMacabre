@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ovilus Macabre</title>
+
+  <!-- Fuente terrorífica -->
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -16,6 +20,7 @@
       flex-direction: column;
       margin: 0;
     }
+
     #button {
       padding: 1em 2em;
       font-size: 1.2em;
@@ -25,12 +30,18 @@
       border-radius: 10px;
       cursor: pointer;
     }
+
     #button:hover {
       background-color: #333;
     }
+
     #word {
       margin-top: 2em;
-      font-size: 2em;
+      font-size: 3em;
+      color: #ff0000;
+      font-weight: bold;
+      text-shadow: 2px 2px 8px #900;
+      font-family: 'Creepster', cursive, sans-serif;
       text-align: center;
     }
   </style>
@@ -50,7 +61,6 @@
     let vocesCargadas = false;
     let vozSeleccionada = null;
 
-    // Cargar voces y seleccionar una en español
     function cargarVoces() {
       const voces = speechSynthesis.getVoices();
       if (voces.length > 0) {
@@ -59,7 +69,6 @@
       }
     }
 
-    // Llamar a cargarVoces cuando las voces cambien
     speechSynthesis.onvoiceschanged = cargarVoces;
 
     function hablarPalabra() {
@@ -90,7 +99,6 @@
     document.getElementById("button").addEventListener("click", () => {
       iniciarSonido();
 
-      // Esperar 300ms para asegurar que las voces están disponibles
       setTimeout(() => {
         if (!vocesCargadas) cargarVoces();
 
