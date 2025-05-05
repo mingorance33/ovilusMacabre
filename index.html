@@ -1,93 +1,108 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ovilus Macabre</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-            flex-direction: column;
-        }
-        #button {
-            background-color: #333;
-            color: white;
-            padding: 15px 30px;
-            font-size: 20px;
-            border: none;
-            cursor: pointer;
-            border-radius: 10px;
-        }
-        #button:hover {
-            background-color: #444;
-        }
-        #word {
-            font-size: 36px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ovilus Macabre</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      margin: 0;
+    }
+    #button {
+      padding: 1em 2em;
+      font-size: 1.2em;
+      background-color: #222;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    #button:hover {
+      background-color: #333;
+    }
+    #word {
+      margin-top: 2em;
+      font-size: 2em;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
 
-    <button id="button">Iniciar Ovilus</button>
-    <div id="word"></div>
-    <audio id="noise" src="noise.mp3"></audio>
+  <button id="button">Iniciar Ovilus</button>
+  <div id="word"></div>
+  <audio id="noise" src="noise.mp3"></audio>
 
-    <script>
-        const palabras = [
-            "muerte", "sombra", "demonio", "infierno", "presencia", "dolor",
-            "gritos", "oscuridad", "entidad", "lamento"
-        ];
+  <script>
+    const palabras = [
+      "muerte", "sombra", "demonio", "infierno", "presencia", "dolor",
+      "gritos", "oscuridad", "entidad", "lamento"
+    ];
 
-        let sonidoIniciado = false; // Variable para rastrear si el sonido se ha iniciado
+    let vocesCargadas = false;
+    let vozSeleccionada = null;
 
-        function hablarPalabra() {
-            const palabra = palabras[Math.floor(Math.random() * palabras.length)];
-            document.getElementById("word").innerText = palabra;
+    // Cargar voces y seleccionar una en español
+    function cargarVoces() {
+      const voces = speechSynthesis.getVoices();
+      if (voces.length > 0) {
+        vozSeleccionada = voces.find(v => v.lang.includes("es")) || null;
+        vocesCargadas = true;
+      }
+    }
 
-            const utterance = new SpeechSynthesisUtterance(palabra);
-            utterance.lang = "es-ES";
-            utterance.rate = 0.6;
-            utterance.pitch = 0.2;
-            utterance.volume = 1;
+    // Llamar a cargarVoces cuando las voces cambien
+    speechSynthesis.onvoiceschanged = cargarVoces;
 
-            const voices = speechSynthesis.getVoices().filter(v => v.lang.includes("es"));
-            if (voices.length > 0) {
-                utterance.voice = voices.find(v => v.name.toLowerCase().includes("jorge")) || voices[0];
-            }
+    function hablarPalabra() {
+      if (!vocesCargadas || !vozSeleccionada) return;
 
-            speechSynthesis.speak(utterance);
+      const palabra = palabras[Math.floor(Math.random() * palabras.length)];
+      document.getElementById("word").innerText = palabra;
+
+      const utterance = new SpeechSynthesisUtterance(palabra);
+      utterance.lang = "es-ES";
+      utterance.rate = 0.6;
+      utterance.pitch = 0.2;
+      utterance.volume = 1;
+      utterance.voice = vozSeleccionada;
+
+      speechSynthesis.speak(utterance);
+    }
+
+    function iniciarSonido() {
+      const noise = document.getElementById("noise");
+      if (noise && noise.paused) {
+        noise.volume = 0.05;
+        noise.loop = true;
+        noise.play().catch(err => console.error("Error al reproducir ruido blanco:", err));
+      }
+    }
+
+    document.getElementById("button").addEventListener("click", () => {
+      iniciarSonido();
+
+      // Esperar 300ms para asegurar que las voces están disponibles
+      setTimeout(() => {
+        if (!vocesCargadas) cargarVoces();
+
+        if (vozSeleccionada) {
+          hablarPalabra();
+          setInterval(hablarPalabra, 8000);
+          document.getElementById("button").style.display = "none";
+        } else {
+          alert("Las voces aún no están listas. Intenta tocar el botón de nuevo.");
         }
-
-        function iniciarSonido() {
-            const noise = document.getElementById("noise");
-            if (noise && noise.paused) {
-                noise.volume = 0.05;
-                noise.loop = true;
-                noise.play().catch(err => console.error("Error al reproducir ruido blanco:", err));
-            }
-        }
-
-        // Función para iniciar el sonido y las palabras
-        function iniciarOvilus() {
-            iniciarSonido();
-            hablarPalabra();
-            setInterval(hablarPalabra, 8000); // Repetir la pronunciación cada 8 segundos
-            document.getElementById("button").style.display = "none"; // Ocultar el botón después de iniciarlo
-        }
-
-        // Añadir evento de clic al botón
-        document.getElementById("button").addEventListener("click", iniciarOvilus);
-    </script>
-
+      }, 300);
+    });
+  </script>
 </body>
 </html>
