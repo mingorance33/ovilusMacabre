@@ -18,7 +18,10 @@ function hablarPalabra() {
     utterance.voice = voices.find(v => v.name.toLowerCase().includes("jorge")) || voices[0];
   }
 
-  speechSynthesis.speak(utterance);
+  // Asegurarse de que la voz esté completamente cargada antes de hablar
+  setTimeout(() => {
+    speechSynthesis.speak(utterance);
+  }, 500); // Añadir un pequeño retraso de 500ms
 }
 
 function iniciarSonido() {
