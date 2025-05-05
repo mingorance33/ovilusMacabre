@@ -18,10 +18,10 @@ function hablarPalabra() {
     utterance.voice = voices.find(v => v.name.toLowerCase().includes("jorge")) || voices[0];
   }
 
-  // Asegurarse de que la voz esté completamente cargada antes de hablar
+  // Reproducir la voz después de un retraso para asegurar que las voces están cargadas
   setTimeout(() => {
     speechSynthesis.speak(utterance);
-  }, 500); // Retraso para asegurarse de que las voces se cargan correctamente
+  }, 500); // 500 ms de retraso
 }
 
 function iniciarSonido() {
@@ -41,11 +41,11 @@ window.onload = () => {
 // Añadir eventos para interactuar tanto con el click como el touch
 window.addEventListener("click", () => {
   iniciarSonido();
-  // Añadir un retraso antes de empezar a hablar para asegurar que el sonido blanco haya comenzado
+  // Asegurarse de que haya un pequeño retraso antes de empezar a hablar
   setTimeout(() => {
     hablarPalabra();
     setInterval(hablarPalabra, 8000);
-  }, 500); // Retraso para evitar que la voz y el ruido blanco se mezclen
+  }, 1000); // 1000 ms de retraso para dar tiempo al sonido blanco
 }, { once: true });
 
 window.addEventListener("touchstart", () => {
@@ -53,5 +53,5 @@ window.addEventListener("touchstart", () => {
   setTimeout(() => {
     hablarPalabra();
     setInterval(hablarPalabra, 8000);
-  }, 500); // Retraso para dispositivos móviles
+  }, 1000); // 1000 ms de retraso para dispositivos móviles
 }, { once: true });
