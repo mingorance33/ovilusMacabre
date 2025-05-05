@@ -1,57 +1,39 @@
-const palabras = [
-  "muertes", "sombras", "demonios", "infiernos", "presencias", "dolores",
-  "gritos", "jose", "entidades", "lamentos" // Aquí no son necesarias
-];
-let sonidoIniciado = false; // Variable para rastrear si el sonido se ha iniciado
-
 function hablarPalabra() {
+  // Elige una palabra aleatoria
   const palabra = palabras[Math.floor(Math.random() * palabras.length)];
   document.getElementById("word").innerText = palabra;
 
+  // Configurar el ruido blanco
+  document.getElementById("noise").volume = 0.05;
+
+  // Crear la utterance (lo que se va a decir)
   const utterance = new SpeechSynthesisUtterance(palabra);
   utterance.lang = "es-ES";
-  utterance.rate = 0.6;
-  utterance.pitch = 0.2;
-  utterance.volume = 1;
+  utterance.rate = 0.6;  // Más lento
+  utterance.pitch = 0.2; // Más grave
+  utterance.volume = 1;  // Volumen más alto posible
 
+  // Obtener la lista de voces disponibles
   const voices = speechSynthesis.getVoices().filter(v => v.lang.includes("es"));
-  if (voices.length > 0) {
-    utterance.voice = voices.find(v => v.name.toLowerCase().includes("jorge")) || voices[0];
+
+  // Selección aleatoria de voz entre grave (masculina) y niña (femenina)
+  const randomVoice = Math.random() < 0.5 ? 
+    // Voz masculina, más grave y lenta
+    voices.find(v => v.name.toLowerCase().includes("jorge")) || voices[0] :
+    // Voz femenina de niña, más aguda y espeluznante
+    voices.find(v => v.name.toLowerCase().includes("maría")) || voices[0];
+
+  // Ajustar las propiedades de la voz
+  if (randomVoice.name.toLowerCase().includes("jorge")) {
+    utterance.pitch = 0.2;  // Mantener grave
+    utterance.rate = 0.5;   // Más lento
+  } else if (randomVoice.name.toLowerCase().includes("maría")) {
+    utterance.pitch = 1.2;  // Aguda (niña)
+    utterance.rate = 0.6;   // Relativamente lenta
   }
 
+  utterance.voice = randomVoice;
+
+  // Hablar la palabra seleccionada
   speechSynthesis.speak(utterance);
 }
-
-function iniciarSonido() {
-  const noise = document.getElementById("noise");
-  if (noise && noise.paused) {
-    noise.volume = 0.05;
-    noise.loop = true;
-    noise.play().catch(err => console.error("Error al reproducir ruido blanco:", err));
-  }
-}
-
-// Lanzar las voces cuando se cargan
-window.onload = () => {
-  speechSynthesis.onvoiceschanged = () => hablarPalabra();
-};
-
-// Primer toque: Inicia el ruido blanco
-window.addEventListener("click", () => {
-  if (!sonidoIniciado) {
-    iniciarSonido();
-    sonidoIniciado = true;
-    console.log("Ruido blanco iniciado, toca nuevamente para escuchar las palabras.");
-  }
-}, { once: true });
-
-// Segundo toque: Inicia la pronunciación de las palabras
-window.addEventListener("touchstart", () => {
-  if (sonidoIniciado) {
-    hablarPalabra();
-    setInterval(hablarPalabra, 15000); // Repite la pronunciación cada 8 segundos
-    console.log("Palabras comenzaron a pronunciarse.");
-  } else {
-    console.log("Primero toca para iniciar el ruido blanco.");
-  }
-}, { once: true });
