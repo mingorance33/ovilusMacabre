@@ -4,7 +4,7 @@ function hablarPalabra() {
   document.getElementById("word").innerText = palabra;
 
   // Configurar el ruido blanco
-  document.getElementById("noise").volume = 0.01;
+  document.getElementById("noise").volume = 0.01; // Controlado desde el html
 
   // Crear la utterance (lo que se va a decir)
   const utterance = new SpeechSynthesisUtterance(palabra);
