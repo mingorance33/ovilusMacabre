@@ -3,6 +3,8 @@ const palabras = [
   "gritos", "oscuridad", "entidad", "lamento"
 ];
 
+let sonidoIniciado = false; // Variable para rastrear si el sonido se ha iniciado
+
 function hablarPalabra() {
   const palabra = palabras[Math.floor(Math.random() * palabras.length)];
   document.getElementById("word").innerText = palabra;
@@ -18,10 +20,7 @@ function hablarPalabra() {
     utterance.voice = voices.find(v => v.name.toLowerCase().includes("jorge")) || voices[0];
   }
 
-  // Reproducir la voz después de un retraso para asegurar que las voces están cargadas
-  setTimeout(() => {
-    speechSynthesis.speak(utterance);
-  }, 500); // 500 ms de retraso
+  speechSynthesis.speak(utterance);
 }
 
 function iniciarSonido() {
@@ -38,20 +37,22 @@ window.onload = () => {
   speechSynthesis.onvoiceschanged = () => hablarPalabra();
 };
 
-// Añadir eventos para interactuar tanto con el click como el touch
+// Primer toque: Inicia el ruido blanco
 window.addEventListener("click", () => {
-  iniciarSonido();
-  // Asegurarse de que haya un pequeño retraso antes de empezar a hablar
-  setTimeout(() => {
-    hablarPalabra();
-    setInterval(hablarPalabra, 8000);
-  }, 1000); // 1000 ms de retraso para dar tiempo al sonido blanco
+  if (!sonidoIniciado) {
+    iniciarSonido();
+    sonidoIniciado = true;
+    console.log("Ruido blanco iniciado, toca nuevamente para escuchar las palabras.");
+  }
 }, { once: true });
 
+// Segundo toque: Inicia la pronunciación de las palabras
 window.addEventListener("touchstart", () => {
-  iniciarSonido();
-  setTimeout(() => {
+  if (sonidoIniciado) {
     hablarPalabra();
-    setInterval(hablarPalabra, 8000);
-  }, 1000); // 1000 ms de retraso para dispositivos móviles
+    setInterval(hablarPalabra, 8000); // Repite la pronunciación cada 8 segundos
+    console.log("Palabras comenzaron a pronunciarse.");
+  } else {
+    console.log("Primero toca para iniciar el ruido blanco.");
+  }
 }, { once: true });
