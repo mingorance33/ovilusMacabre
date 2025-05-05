@@ -1,6 +1,6 @@
 const palabras = [
-  "muerte", "sombra", "demonio", "infierno", "presencia", "dolor",
-  "gritos", "oscuridad", "entidad", "lamento"
+  "muerte", "sombras", "demonios", "infiernos", "presencias", "dolor",
+  "gritos", "jose", "entidad", "lamentos"
 ];
 let sonidoIniciado = false; // Variable para rastrear si el sonido se ha iniciado
 
