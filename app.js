@@ -1,6 +1,6 @@
 const palabras = [
   "muertes", "sombras", "demonios", "infiernos", "presencias", "dolores",
-  "gritos", "jose", "entidades", "lamentos"
+  "gritos", "jose", "entidades", "lamentos" // Aquí no son necesarias
 ];
 let sonidoIniciado = false; // Variable para rastrear si el sonido se ha iniciado
 
@@ -49,7 +49,7 @@ window.addEventListener("click", () => {
 window.addEventListener("touchstart", () => {
   if (sonidoIniciado) {
     hablarPalabra();
-    setInterval(hablarPalabra, 8000); // Repite la pronunciación cada 8 segundos
+    setInterval(hablarPalabra, 15000); // Repite la pronunciación cada 8 segundos
     console.log("Palabras comenzaron a pronunciarse.");
   } else {
     console.log("Primero toca para iniciar el ruido blanco.");
