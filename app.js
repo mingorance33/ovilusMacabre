@@ -21,7 +21,7 @@ function hablarPalabra() {
   // Asegurarse de que la voz esté completamente cargada antes de hablar
   setTimeout(() => {
     speechSynthesis.speak(utterance);
-  }, 500); // Añadir un pequeño retraso de 500ms
+  }, 500); // Retraso para asegurarse de que las voces se cargan correctamente
 }
 
 function iniciarSonido() {
@@ -41,12 +41,17 @@ window.onload = () => {
 // Añadir eventos para interactuar tanto con el click como el touch
 window.addEventListener("click", () => {
   iniciarSonido();
-  hablarPalabra();
-  setInterval(hablarPalabra, 8000);
+  // Añadir un retraso antes de empezar a hablar para asegurar que el sonido blanco haya comenzado
+  setTimeout(() => {
+    hablarPalabra();
+    setInterval(hablarPalabra, 8000);
+  }, 500); // Retraso para evitar que la voz y el ruido blanco se mezclen
 }, { once: true });
 
 window.addEventListener("touchstart", () => {
   iniciarSonido();
-  hablarPalabra();
-  setInterval(hablarPalabra, 8000);
+  setTimeout(() => {
+    hablarPalabra();
+    setInterval(hablarPalabra, 8000);
+  }, 500); // Retraso para dispositivos móviles
 }, { once: true });
