@@ -2,12 +2,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ovilus Macabre</title>
-
-  <!-- Fuente terrorífica -->
   <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
-
+  <link rel="manifest" href="manifest.json">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -21,95 +19,53 @@
       margin: 0;
     }
 
-    #button {
-      padding: 1em 2em;
-      font-size: 1.2em;
-      background-color: #222;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    #button:hover {
-      background-color: #333;
-    }
-
     #word {
-      margin-top: 2em;
       font-size: 3em;
       color: #ff0000;
-      font-weight: bold;
+      font-family: 'Creepster', cursive;
       text-shadow: 2px 2px 8px #900;
-      font-family: 'Creepster', cursive, sans-serif;
       text-align: center;
+      margin-top: 1em;
     }
   </style>
 </head>
 <body>
-
-  <button id="button">Iniciar Ovilus</button>
   <div id="word"></div>
-  <audio id="noise" src="noise.mp3"></audio>
+  <audio id="noise" src="noise.mp3" loop></audio>
 
   <script>
-    const palabras = [
-    "silla", "sientes una presencia", "cielos", "invocación", "el reloj marca la medianoche", "coche", "llave", "fantasma", "oscuridad", "sacrificio", "gritos", "las luces parpadean", "papel", "miras por la ventana", "noche", "sombra", "agua", "conjuro", "no puedes moverte", "camino", "ritual", "hoja", "ritual", "papel", "manicomio", "sangre", "ventana", "demonio", "zapato", "dolor", "posesión", "necrófago", "sombra", "hechizo", "cadáver", "fuego", "espanto", "pánico", "entidad", "libro", "zapato", "crujido", "la sombra te sigue", "zapato", "lago", "crujido", "arena", "ventana", "desgarro", "eco", "algo se mueve", "lamento", "miras por la ventana", "oscuridad", "cementerio", "conjuro", "papel", "el reloj marca la medianoche", "infierno", "nube", "hoja", "la puerta cruje", "piedra", "cadáver", "dolor", "presencia", "crujido", "llave", "invocación", "hoja", "posesión", "agua", "cadáver", "gritos lejanos", "invocación", "sacrificio", "miras por la ventana", "no puedes moverte", "en el bosque todo es silencio", "zapato", "llave", "desgarro", "hoja", "libro", "espíritu", "camino", "café", "un lamento rompe la calma", "el aire se enfría", "cementerio", "hechizo", "muerte", "luz", "algo se mueve", "crujido", "dolor", "infierno", "lamento", "viento", "el suelo tiembla", "teléfono", "puerta", "silla", "ritual", "cementerio", "dolor", "en el bosque todo es silencio", "zapato", "el suelo tiembla", "la sombra te sigue", "viento", "posesión", "sientes una presencia", "gritos lejanos", "algo se acerca", "cielo", "dolor", "sufrimiento", "desgarro", "papel", "cementerio", "desgarro", "zapato", "un lamento rompe la calma", "cementerio", "te sientes observado", "arena", "la puerta cruje", "agua", "espanto", "crujido", "miras por la ventana", "invocación", "ritual", "silla", "sombra", "infierno", "sacrificio", "un lamento rompe la calma", "zapato", "sufrimiento", "cráneo", "desgarro", "río", "río", "luz", "nube", "sol", "sangre", "pánico", "silla", "pared", "algo llama a la puerta", "árbol", "el aire se enfría", "sufrimiento", "ventana", "zapato", "gritos lejanos", "te sientes observado", "coche", "crujido", "oscuridad", "te sientes observado", "teléfono", "sangre", "lamento", "sacrificio", "infierno", "eco", "ritual", "puerta", "viento", "te sientes observado", "manicomio", "río", "el viento susurra", "mesa", "desgarro", "te sientes observado", "la casa está vacía", "piedra", "gritos", "sacrificio", "sufrimiento", "la sombra te sigue", "el aire se enfría", "en el bosque todo es silencio", "necrófago", "la sombra te sigue", "piedra", "necrófago", "sangre", "cementerio", "necrófago", "infierno", "miras por la ventana", "posesión", "hoja", "ventana", "cementerio", "infierno", "cementerio", "cadáver", "ritual", "agua", "aparecido", "río", "espanto", "espíritu", "hechizo", "lago", "eco", "camino", "la sombra te sigue", "sangre", "las luces parpadean", "lago", "presencia", "conjuro", "presencia", "invocación", "posesión", "techo", "cementerio", "pared", "el suelo tiembla", "camino", "muerte", "arena", "sol", "mesa", "te sientes observado", "un lamento rompe la calma", "crujido", "conjuro", "la casa está vacía", "hechizo", "eco", "miras por la ventana", "zapato", "el reloj marca la medianoche", "río", "sufrimiento", "la casa está vacía", "cadáver", "luz", "cadáver", "cadáver", "el aire se enfría", "necrófago", "el reloj marca la medianoche", "ritual", "invocación", "silla", "la casa está vacía", "el aire se enfría", "río", "la casa está vacía", "sufrimiento", "algo se mueve", "río", "algo se acerca", "en el bosque todo es silencio", "crujido", "teléfono", "hechizo", "hechizo", "muerte", "sacrificio", "cielo", "viento", "nube", "pánico", "sientes una presencia", "espíritu", "demonio", "puerta", "luz", "demonio", "noche", "noche", "hechizo", "árbol", "árbol", "hechizo", "lago", "fuego", "el aire se enfría", "teléfono", "mesa", "cadáver", "un escalofrío recorre tu espalda", "entidad", "papel", "demonio", "desgarro", "sol", "café", "fuego", "manicomio", "nube", "el aire se enfría", "el viento susurra", "silla", "camino", "oscuridad", "camino", "cadáver", "en el bosque todo es silencio", "piedra", "nube", "susurro", "manicomio", "crujido", "viento", "un lamento rompe la calma", "invocación", "infierno", "sacrificio", "luz", "piedra", "eco", "conjuro", "fuego", "sol", "nube", "noche", "te sientes observado", "sombra", "sufrimiento", "el suelo tiembla", "cementerio", "teléfono", "lago", "espanto", "aparecido", "gritos", "un escalofrío recorre tu espalda", "algo se acerca", "fuego", "desgarro", "muerte", "eco", "sufrimiento", "agua", "lamento", "cementerio", "cadáver", "sientes una presencia", "estrella", "aparecido", "no puedes moverte", "pared", "muerte", "infierno", "gritos", "lamento", "un escalofrío recorre tu espalda", "un escalofrío recorre tu espalda", "libro", "aparecido", "árbol", "conjuro", "silla", "la puerta cruje", "dolor", "luz", "entidad", "ventana", "piedra", "dolor", "dolor", "el aire se enfría", "posesión", "ritual", "presencia", "sacrificio", "zapato", "sacrificio", "crujido", "susurro", "miras por la ventana", "papel", "libro", "cadáver", "te sientes observado", "dolor", "aparecido", "mesa", "cráneo", "zapato", "techo", "crujido", "lago", "cráneo", "conjuro", "papel", "cementerio", "demonio", "conjuro", "café", "camino", "aparecido", "eco", "luz", "sientes una presencia", "invocación", "aparecido", "espíritu", "algo llama a la puerta", "zapato", "sangre", "pánico", "sientes una presencia", "teléfono", "mesa", "en el bosque todo es silencio", "la puerta cruje", "demonio", "conjuro", "papel", "cielo", "libro", "el viento susurra", "eco", "coche", "muerte", "sangre", "entidad", "algo se mueve", "no puedes moverte", "eco", "infierno", "gritos", "un escalofrío recorre tu espalda", "posesión", "un escalofrío recorre tu espalda", "llave", "infierno", "lago", "conjuro", "conjuro", "conjuro", "el viento susurra", "pared", "sombra", "susurro", "café", "lamento", "sufrimiento", "piedra", "demonio", "algo llama a la puerta", "infierno", "algo se mueve", "gritos", "hoja", "hoja", "posesión", "no puedes moverte", "fantasma", "fuego", "teléfono", "el reloj marca la medianoche", "gritos", "no puedes moverte", "sacrificio", "algo se acerca", "zapato", "las luces parpadean", "lago", "arena", "lamento", "techo", "coche", "manicomio", "sangre", "invocación", "lago", "sol", "pared", "árbol", "puerta", "agua", "el aire se enfría", "manicomio", "ritual", "invocación", "algo llama a la puerta", "demonio", "hoja", "necrófago", "eco", "invocación", "algo se acerca", "río", "posesión", "sol", "algo se acerca", "infierno", "susurro", "en el bosque todo es silencio", "algo se mueve", "la puerta cruje", "fuego", "fuego", "el reloj marca la medianoche", "la casa está vacía", "dolor", "ritual", "río", "coche", "te sientes observado", "techo", "entidad", "llave", "en el bosque todo es silencio", "luz", "pared", "nube", "teléfono", "fuego", "silla", "fantasma", "eco", "piedra", "coche", "teléfono", "espíritu", "un lamento rompe la calma", "ritual", "arena", "silla", "dolor", "necrófago", "pánico", "coche", "infierno", "sangre", "algo se mueve", "en el bosque todo es silencio", "hechizo", "arena", "puerta", "hoja", "libro", "oscuridad", "las luces parpadean", "miras por la ventana", "oscuridad", "un escalofrío recorre tu espalda", "silla", "techo", "nube", "lago", "cadáver", "camino", "sacrificio", "muerte", "agua", "ventana", "sangre", "posesión", "libro", "sangre", "techo", "hoja", "te sientes observado", "infierno", "sacrificio", "zapato", "demonio", "el viento susurra", "pared", "libro", "algo se acerca", "la sombra te sigue", "fuego", "estrella", "el suelo tiembla", "camino", "el viento susurra", "silla", "posesión", "hechizo", "algo llama a la puerta", "el reloj marca la medianoche", "hoja", "fantasma", "entidad", "un escalofrío recorre tu espalda", "sacrificio", "el reloj marca la medianoche", "algo se mueve", "lamento", "aparecido", "cementerio", "dolor", "conjuro", "cielo", "fantasma", "mesa", "demonio", "el aire se enfría", "sangre", "infierno", "lamento", "el viento susurra", "un escalofrío recorre tu espalda", "la sombra te sigue", "la puerta cruje", "techo", "piedra", "la puerta cruje", "sombra", "viento", "gritos lejanos", "libro", "coche", "aparecido", "el aire se enfría", "en el bosque todo es silencio", "gritos", "cementerio", "un escalofrío recorre tu espalda", "papel", "puerta", "estrella", "sol", "la puerta cruje", "cielo", "la puerta cruje", "luz", "el suelo tiembla", "árbol", "susurro", "la puerta cruje", "desgarro", "lamento", "el aire se enfría", "lago", "algo se mueve", "demonio", "noche", "conjuro", "camino", "eco", "sientes una presencia", "teléfono", "fantasma", "techo", "miras por la ventana", "sientes una presencia", "necrófago", "papel", "río", "el reloj marca la medianoche", "algo se acerca", "conjuro", "cráneo", "cementerio", "presencia", "papel", "sol", "no puedes moverte", "libro", "sombra", "lago", "noche", "algo llama a la puerta", "teléfono", "cadáver", "algo llama a la puerta", "espanto", "algo llama a la puerta", "aparecido", "libro", "manicomio", "cadáver", "espíritu", "gritos", "arena", "río", "pared", "infierno", "gritos lejanos", "libro", "zapato", "arena", "coche", "sacrificio", "posesión", "nube", "pánico", "arena", "piedra", "presencia", "te sientes observado", "muerte", "aparecido", "desgarro", "espíritu", "fantasma", "oscuridad", "espíritu", "cadáver", "pánico", "presencia", "te sientes observado", "mesa", "manicomio", "hechizo", "lago", "las luces parpadean", "árbol", "silla", "un lamento rompe la calma", "oscuridad", "zapato", "agua", "miras por la ventana", "el aire se enfría", "necrófago", "demonio", "las luces parpadean", "cráneo", "un lamento rompe la calma", "miras por la ventana", "demonio", "presencia", "un lamento rompe la calma", "muerte", "árbol", "libro", "gritos lejanos", "árbol", "gritos", "la puerta cruje", "presencia", "cielo", "el reloj marca la medianoche", "libro", "cráneo", "fuego", "en el bosque todo es silencio", "sol", "árbol", "manicomio", "muerte", "eco", "nube", "nube", "sientes una presencia", "la sombra te sigue", "café", "posesión", "arena", "desgarro", "estrella", "mesa", "el suelo tiembla", "pánico", "silla", "cadáver", "conjuro", "posesión", "llave", "no puedes moverte", "arena", "lago", "te sientes observado", "libro", "puerta", "invocación", "infierno", "sufrimiento", "pared", "noche", "sientes una presencia", "cadáver", "crujido", "silla", "susurro", "sol", "sol", "las luces parpadean", "nube", "el reloj marca la medianoche", "algo se mueve", "la puerta cruje", "agua", "cementerio", "las luces parpadean", "estrella", "espanto", "cementerio", "la casa está vacía", "la sombra te sigue", "cadáver", "gritos", "oscuridad", "el reloj marca la medianoche", "algo se mueve", "espíritu", "algo se mueve", "viento", "algo se acerca", "posesión", "lamento", "mesa", "cadáver", "hoja", "te sientes observado", "arena", "mesa", "dolor", "necrófago", "agua", "sangre", "el reloj marca la medianoche", "algo llama a la puerta", "sombra", "cementerio", "gritos lejanos", "fantasma", "entidad", "coche", "papel", "hechizo", "teléfono", "río", "viento", "el aire se enfría", "coche", "miras por la ventana", "libro", "un lamento rompe la calma", "lago", "te sientes observado", "teléfono", "miras por la ventana", "cielo", "papel", "fantasma", "presencia", "agua", "presencia", "camino", "gritos lejanos", "muerte", "crujido", "sufrimiento", "no puedes moverte", "el viento susurra", "susurro", "algo se acerca", "cadáver", "la sombra te sigue", "espíritu", "árbol", "noche", "algo llama a la puerta", "el suelo tiembla", "pánico", "gritos", "sombra", "gritos", "gritos lejanos", "manicomio", "no puedes moverte", "mesa", "ritual", "libro", "eco", "techo", "sacrificio", "gritos", "nube", "te sientes observado", "espanto", "las luces parpadean", "piedra", "espíritu", "zapato", "muerte", "algo se mueve", "un lamento rompe la calma", "eco", "no puedes moverte", "pared", "lago", "la puerta cruje", "silla", "café", "te sientes observado", "gritos", "fuego", "espíritu", "cielo", "desgarro", "viento", "zapato", "teléfono", "fuego", "presencia", "posesión", "en el bosque todo es silencio", "sangre", "posesión", "un escalofrío recorre tu espalda", "aparecido", "estrella", "el viento susurra", "cráneo", "sufrimiento", "cielo", "demonio", "susurro", "infierno", "papel", "lamento", "necrófago", "el reloj marca la medianoche", "camino", "sangre", "techo", "sacrificio", "pared", "ritual", "viento", "noche", "sombra", "un lamento rompe la calma", "sol", "las luces parpadean", "conjuro", "ventana", "sangre", "algo llama a la puerta", "en el bosque todo es silencio", "arena", "presencia", "eco", "gritos lejanos", "el aire se enfría", "cráneo", "posesión", "un lamento rompe la calma", "hechizo", "un lamento rompe la calma", "posesión", "hoja", "algo llama a la puerta", "lamento", "manicomio", "hoja", "en el bosque todo es silencio", "pánico", "crujido", "crujido", "la puerta cruje", "lago", "eco", "silla", "entidad", "ritual", "cielo", "manicomio", "sol", "desgarro", "necrófago", "las luces parpadean", "pánico", "desgarro", "el suelo tiembla", "sufrimiento", "teléfono", "algo se mueve", "gritos lejanos", "dolor", "espíritu", "desgarro", "cielo", "demonio", "sangre", "miras por la ventana", "coche", "espanto", "el aire se enfría", "hechizo", "ritual", "desgarro", "desgarro", "un escalofrío recorre tu espalda", "sangre", "nube", "zapato", "hechizo", "sientes una presencia"  
-    ];
+    if (!window.__OVILUS_INIT__) {
+      window.__OVILUS_INIT__ = true;
 
-    let vocesCargadas = false;
-    let vozSeleccionada = null;
+      const palabras = ["silla", "invocación", "sacrificio", "sientes una presencia", "la sombra te sigue"];
+      const wordElement = document.getElementById('word');
+      const noise = document.getElementById('noise');
 
-    function cargarVoces() {
-      const voces = speechSynthesis.getVoices();
-      if (voces.length > 0) {
-        vozSeleccionada = voces.find(v => v.lang.includes("es")) || null;
-        vocesCargadas = true;
+      function speak(text) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'es-ES';
+        speechSynthesis.speak(utterance);
       }
-    }
 
-    speechSynthesis.onvoiceschanged = cargarVoces;
-
-    function hablarPalabra() {
-      if (!vocesCargadas || !vozSeleccionada) return;
-
-      const palabra = palabras[Math.floor(Math.random() * palabras.length)];
-      document.getElementById("word").innerText = palabra;
-
-      const utterance = new SpeechSynthesisUtterance(palabra);
-      utterance.lang = "es-ES";
-      utterance.rate = 0.6;
-      utterance.pitch = 0.2;
-      utterance.volume = 1;
-      utterance.voice = vozSeleccionada;
-
-      speechSynthesis.speak(utterance);
-    }
-
-    function iniciarSonido() {
-      const noise = document.getElementById("noise");
-      if (noise && noise.paused) {
-        noise.volume = 0.01;
-        noise.loop = true;
-        noise.play().catch(err => console.error("Error al reproducir ruido blanco:", err));
+      function getRandomWord() {
+        return palabras[Math.floor(Math.random() * palabras.length)];
       }
+
+      function showWord() {
+        const word = getRandomWord();
+        wordElement.textContent = word;
+        speak(word);
+      }
+
+      function startOvilus() {
+        noise.play();
+        setInterval(showWord, 8000);
+      }
+
+      window.addEventListener('load', () => {
+        startOvilus();
+      });
     }
-
-    document.getElementById("button").addEventListener("click", () => {
-      iniciarSonido();
-
-      setTimeout(() => {
-        if (!vocesCargadas) cargarVoces();
-
-        if (vozSeleccionada) {
-          hablarPalabra();
-          setInterval(hablarPalabra, 25000);
-          document.getElementById("button").style.display = "none";
-        } else {
-          alert("Las voces aún no están listas. Intenta tocar el botón de nuevo.");
-        }
-      }, 300);
-    });
   </script>
 </body>
 </html>
