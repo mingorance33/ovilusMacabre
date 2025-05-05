@@ -89,7 +89,7 @@
     function iniciarSonido() {
       const noise = document.getElementById("noise");
       if (noise && noise.paused) {
-        noise.volume = 0.05;
+        noise.volume = 0.01;
         noise.loop = true;
         noise.play().catch(err => console.error("Error al reproducir ruido blanco:", err));
       }
@@ -103,7 +103,7 @@
 
         if (vozSeleccionada) {
           hablarPalabra();
-          setInterval(hablarPalabra, 8000);
+          setInterval(hablarPalabra, 15000);
           document.getElementById("button").style.display = "none";
         } else {
           alert("Las voces aún no están listas. Intenta tocar el botón de nuevo.");
