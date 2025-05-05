@@ -30,11 +30,19 @@ function iniciarSonido() {
   }
 }
 
+// Lanzar las voces cuando se cargan
 window.onload = () => {
   speechSynthesis.onvoiceschanged = () => hablarPalabra();
 };
 
+// Añadir eventos para interactuar tanto con el click como el touch
 window.addEventListener("click", () => {
+  iniciarSonido();
+  hablarPalabra();
+  setInterval(hablarPalabra, 8000);
+}, { once: true });
+
+window.addEventListener("touchstart", () => {
   iniciarSonido();
   hablarPalabra();
   setInterval(hablarPalabra, 8000);
