@@ -21,7 +21,7 @@
       margin: 0;
     }
 
-    #button {
+    #button, #stopButton {
       padding: 1em 2em;
       font-size: 1.2em;
       background-color: #222;
@@ -31,7 +31,7 @@
       cursor: pointer;
     }
 
-    #button:hover {
+    #button:hover, #stopButton:hover {
       background-color: #333;
     }
 
@@ -49,98 +49,120 @@
 <body>
 
   <button id="button">Iniciar Ovilus</button>
+  <button id="stopButton" style="display:none; margin-top:1em;">Detener</button>
   <div id="word"></div>
   <audio id="noise" src="noise.mp3"></audio>
 
   <script>
-  let palabras = [];
-  let vocesCargadas = false;
-  let vozSeleccionada = null;
-  let intervaloHablar = null;
+    let palabras = [];
+    let vocesCargadas = false;
+    let vozSeleccionada = null;
+    let intervaloHablar = null;
 
-  async function cargarPalabras() {
-    if (palabras.length) return;
-    try {
-      const res = await fetch("./words.json");
-      const json = await res.json();
-      palabras = Array.isArray(json.words) ? json.words : [];
-      console.log("Palabras cargadas:", palabras.length);
-    } catch (e) {
-      console.error("Error cargando words.json", e);
-      palabras = [];
-    }
-  }
-
-  function cargarVoces() {
-    const voces = speechSynthesis.getVoices();
-    if (voces.length > 0) {
-      vozSeleccionada =
-        voces.find(v => v.lang.includes("es")) ||
-        voces.find(v => v.lang.includes("en")) ||
-        voces[0];
-      vocesCargadas = true;
-      console.log("Voz seleccionada:", vozSeleccionada && vozSeleccionada.name);
-    }
-  }
-
-  if ("speechSynthesis" in window) {
-    speechSynthesis.onvoiceschanged = cargarVoces;
-    cargarVoces();
-  }
-
-  function hablarPalabra() {
-    if (!vocesCargadas || !vozSeleccionada || !palabras.length) return;
-
-    const palabra = palabras[Math.floor(Math.random() * palabras.length)];
-    document.getElementById("word").innerText = palabra;
-
-    const utterance = new SpeechSynthesisUtterance(palabra);
-    utterance.lang = "es-ES";
-    utterance.rate = 0.6;
-    utterance.pitch = 0.2;
-    utterance.volume = 1;
-    utterance.voice = vozSeleccionada;
-
-    speechSynthesis.speak(utterance);
-  }
-
-  function iniciarSonido() {
-    const noise = document.getElementById("noise");
-    if (noise && noise.paused) {
-      noise.volume = 0.01;
-      noise.loop = true;
-      noise.play().catch(err =>
-        console.error("Error al reproducir ruido blanco:", err)
-      );
-    }
-  }
-
-  document.getElementById("button").addEventListener("click", async () => {
-    iniciarSonido();
-
-    // cargar palabras del JSON
-    await cargarPalabras();
-    if (!palabras.length) {
-      alert("No se pudieron cargar las palabras.");
-      return;
-    }
-
-    // pequeño delay para dar tiempo a las voces
-    setTimeout(() => {
-      if (!vocesCargadas) cargarVoces();
-
-      if (vozSeleccionada) {
-        hablarPalabra();
-        if (!intervaloHablar) {
-          intervaloHablar = setInterval(hablarPalabra, 15000);
-        }
-        document.getElementById("button").style.display = "none";
-      } else {
-        alert("Las voces aún no están listas. Intenta tocar el botón de nuevo.");
+    async function cargarPalabras() {
+      if (palabras.length) return;
+      try {
+        const res = await fetch("./words.json");
+        const json = await res.json();
+        palabras = Array.isArray(json.words) ? json.words : [];
+        console.log("Palabras cargadas:", palabras.length);
+      } catch (e) {
+        console.error("Error cargando words.json", e);
+        palabras = [];
       }
-    }, 300);
-  });
-</script>
+    }
 
+    function cargarVoces() {
+      if (!("speechSynthesis" in window)) return;
+      const voces = speechSynthesis.getVoices();
+      if (voces.length > 0) {
+        vozSeleccionada =
+          voces.find(v => v.lang.includes("es")) ||
+          voces.find(v => v.lang.includes("en")) ||
+          voces[0];
+        vocesCargadas = true;
+        console.log("Voz seleccionada:", vozSeleccionada && vozSeleccionada.name);
+      }
+    }
+
+    if ("speechSynthesis" in window) {
+      speechSynthesis.onvoiceschanged = cargarVoces;
+      cargarVoces();
+    }
+
+    function hablarPalabra() {
+      if (!vocesCargadas || !vozSeleccionada || !palabras.length) return;
+
+      const palabra = palabras[Math.floor(Math.random() * palabras.length)];
+      document.getElementById("word").innerText = palabra;
+
+      const utterance = new SpeechSynthesisUtterance(palabra);
+      utterance.lang = "es-ES";
+      utterance.rate = 0.6;
+      utterance.pitch = 0.2;
+      utterance.volume = 1;
+      utterance.voice = vozSeleccionada;
+
+      speechSynthesis.speak(utterance);
+    }
+
+    function iniciarSonido() {
+      const noise = document.getElementById("noise");
+      if (noise && noise.paused) {
+        noise.volume = 0.01;
+        noise.loop = true;
+        noise.play().catch(err =>
+          console.error("Error al reproducir ruido blanco:", err)
+        );
+      }
+    }
+
+    function detenerTodo() {
+      if ("speechSynthesis" in window) {
+        speechSynthesis.cancel();
+      }
+      if (intervaloHablar) {
+        clearInterval(intervaloHablar);
+        intervaloHablar = null;
+      }
+
+      const noise = document.getElementById("noise");
+      if (noise && !noise.paused) {
+        noise.pause();
+        noise.currentTime = 0;
+      }
+
+      document.getElementById("word").innerText = "";
+      document.getElementById("button").style.display = "inline-block";
+      document.getElementById("stopButton").style.display = "none";
+    }
+
+    document.getElementById("button").addEventListener("click", async () => {
+      iniciarSonido();
+
+      await cargarPalabras();
+      if (!palabras.length) {
+        alert("No se pudieron cargar las palabras.");
+        return;
+      }
+
+      setTimeout(() => {
+        if (!vocesCargadas) cargarVoces();
+
+        if (vozSeleccionada) {
+          hablarPalabra();
+          if (!intervaloHablar) {
+            intervaloHablar = setInterval(hablarPalabra, 15000);
+          }
+          document.getElementById("button").style.display = "none";
+          document.getElementById("stopButton").style.display = "inline-block";
+        } else {
+          alert("Las voces aún no están listas. Intenta tocar el botón de nuevo.");
+        }
+      }, 300);
+    });
+
+    document.getElementById("stopButton").addEventListener("click", detenerTodo);
+  </script>
 </body>
 </html>
