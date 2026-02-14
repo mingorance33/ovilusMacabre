@@ -71,7 +71,7 @@ function hablarPalabra() {
   // Configurar el ruido blanco
   const noiseEl = document.getElementById("noise");
   if (noiseEl) {
-    noiseEl.volume = 0.01; // Controlado desde el HTML
+    noiseEl.volume = 0.003; // Controlado desde el HTML
   }
 
   // Crear la utterance (lo que se va a decir)
