@@ -15,7 +15,7 @@ let intervaloHablar = null;
 // LÓGICA QUINTA PALABRA
 // ===========================
 
-const PALABRA_ESPECIAL = "INVOCACIÓN"; // cámbiala por la que quieras
+const PALABRA_ESPECIAL = "SIETE DE COPAS"; // cámbiala por la que quieras
 const CONTADOR_KEY = "ovilus_contador_palabras";
 const ESPECIAL_KEY = "ovilus_palabra_especial_mostrada";
 
