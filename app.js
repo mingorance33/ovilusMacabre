@@ -141,12 +141,6 @@ function detenerOvilus() {
   if (stopBtn) stopBtn.style.display = "none";
 }
 
-// 👇 Añade esto al final de app.js
-window.addEventListener("load", () => {
-  const noiseEl = document.getElementById("noise");
-  if (noiseEl) {
-    noiseEl.volume = 0.002; // MUY bajo
-  }
 
 // ===========================
 // INICIALIZACIÓN
